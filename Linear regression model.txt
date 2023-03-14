@@ -1,0 +1,23 @@
+Linear regression model
+
+# library for split
+from sklearn.model_selection import train_test_split
+
+# library for regression
+from sklearn.linear_model import LinearRegression
+
+
+# split (random_state means set seed)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, test_size = 0.2, random_state=6)
+
+# Linear 알고리즘 호출
+mlr = Linear Regression()
+
+# 알고리즘을 훈련데이터에 적용
+mlr.fit(x_train, y_train) 
+
+# 훈련된 모델을 테스트용 데이터를 예측
+y_predict = mlr.predict(x_test)
+
+# 더 나아가서는 y_predict와 y_test로 confusion matrix 와같은 결과로 모델 정확도를 알아볼수 있다. 
+

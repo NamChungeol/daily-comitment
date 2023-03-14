@@ -1,0 +1,7 @@
+visualize scatter plot actual vs predicted rent price
+
+plt.scatter(x_test, y_predict, alpha = 0.5)
+plt.xlabel('Actual rent price')
+plt.ylabel('Predicted rent price')
+plt.title('Actual rent vs. Predicted rent')
+plt.show()
