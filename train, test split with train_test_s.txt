@@ -1,0 +1,10 @@
+train, test split with train_test_split()
+
+train_size: the proportion of the dataset to include in the train split(0~1.0)
+test_size: the proportion of the dataset to include in the test split(0~1.0)
+random_state: the seed used by the random number generator.
+
+# code
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test = train_test_split(x,y, train_size = 0.8, test_size = 0.2)
+
