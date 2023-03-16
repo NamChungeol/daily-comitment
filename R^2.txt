@@ -1,0 +1,26 @@
+R^2
+
+sklearn‘s linear_model.LinearRegression comes with a .score() method that returns the coefficient 
+of determination R² of the prediction.
+
+
+예시:
+
+# split data
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, test_size = 0.2, random_state=6)
+
+# pull the algorithm
+mlr = LinearRegression()
+
+# fit the model(train with inpendents variable)
+model=mlr.fit(x_train, y_train)
+
+# predict dependents variable of test set
+y_predict = mlr.predict(x_test)
+
+# R^2
+print("Train score:")
+print(mlr.score(x_train, y_train))
+
+print("Test score:")
+print(mlr.score(x_test, y_test))
