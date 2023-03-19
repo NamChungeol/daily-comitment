@@ -1,0 +1,59 @@
+Working with *args
+
+
+tables = {
+  1: {
+    'name': 'Jiho',
+    'vip_status': False,
+    'order': 'Orange Juice, Apple Juice'
+  },
+  2: {},
+  3: {},
+  4: {},
+  5: {},
+  6: {},
+  7: {},
+}
+
+
+
+
+# The assign_table function has also been adjusted to account for the changes.
+
+def assign_table(table_number, name, vip_status=False): 
+  tables[table_number]['name'] = name
+  tables[table_number]['vip_status'] = vip_status
+  tables[table_number]['order'] = ''
+
+
+
+
+# Our function assign_and_print_order() should then assign an order to a table. 
+# Inside of our function, access the nested order key for the specific table (using the table_number argument)  #from tables and set it to the order_items parameter.
+
+def assign_and_print_order(table_number, *order_items):
+  tables[table_number]['order'] = order_items
+  for order_item in order_items:
+    print(order_item)
+
+
+
+
+
+# Lastly, let’s see our function in action. Luckily we just had a new customer come in for their reservation. 
+# Use the assign_table() function to add a new customer named 'Arwa' to table 2 with a VIP status set to True.
+
+assign_table( 2, 'Arwa', True)
+
+
+
+
+
+# Now that Arwa is seated and ready to order, call our assign_and_print_order() function for table 2 
+# with the order items of 'Steak', 'Seabass', and 'Wine Bottle'.
+
+assign_and_print_order(2, 'Steak', 'Seabass', 'Wine Bottle')
+
+
+
+print(tables)

@@ -1,0 +1,37 @@
+def my_function(*args):
+  print(args)
+
+*는 Python에서 "가변 인자"를 나타내는 기호입니다. 가변 인자란, 함수를 호출할 때 인자의 개수를 지정하지 않고, 
+0개 이상의 인자를 전달할 수 있도록 하는 방법입니다.
+
+위의 코드에서, *args는 함수에 전달되는 모든 위치 인자(argument)를 튜플(tuple) 형태로 받아들입니다.
+
+
+my_function(1, 2, 3)
+
+# 결과 : (1, 2, 3)
+
+
+my_function('apple', 'banana', 'orange', 'grape')
+
+# 결과 : ('apple', 'banana', 'orange', 'grape')
+
+
+my_function(True, False)
+
+# 결과 : (True, False)
+
+
+
+예시:
+# Jiho wants to expand our restaurant application to also take orders from customers. 
+  This is the perfect time to use the unpacking operator since we never know how many
+  items customers are going to order.
+
+
+def print_order(*order_items):
+  print(order_items)
+
+print_order('Orange Juice', 'Apple Juice', 'Scrambled Eggs', 'Pancakes')
+
+#Output: ('Orange Juice', 'Apple Juice', 'Scrambled Eggs', 'Pancakes')
