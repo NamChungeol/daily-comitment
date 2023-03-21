@@ -1,0 +1,29 @@
+Axis and labels
+
+
+It can be helpful to zoom in or out of the plot, especially if there is some detail want to address.
+
+# AXIS
+
+To zoom, we can use plt.axis(), and the list should contain:
+plt.axis(minx, maxx, miny, maxy)
+
+
+x = [0, 1, 2, 3, 4]
+y = [0, 1, 4, 9, 16]
+plt.plot(x, y)
+plt.axis([0, 3, 2, 5])
+plt.show()
+
+
+
+
+# LABELING
+
+hours = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+happiness = [9.8, 9.9, 9.2, 8.6, 8.3, 9.0, 8.7, 9.1, 7.0, 6.4, 6.9, 7.5]
+plt.plot(hours, happiness)
+plt.xlabel('Time of day')
+plt.ylabel('Happiness Rating (out of 10)')
+plt.title('My Self-Reported Happiness While Awake')
+plt.show()

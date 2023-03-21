@@ -1,0 +1,37 @@
+matplotlib linestyle & marker
+
+
+# linestyle
+
+# Dashed:
+plt.plot(x_values, y_values, linestyle='--')
+
+# Dotted:
+plt.plot(x_values, y_values, linestyle=':')
+
+# No line:
+plt.plot(x_values, y_values, linestyle='')
+
+
+
+
+
+# marker
+
+# A circle:
+plt.plot(x_values, y_values, marker='o')
+
+# A square:
+plt.plot(x_values, y_values, marker='s')
+
+# A star:
+plt.plot(x_values, y_values, marker='*')
+
+
+
+
+
+# color
+
+plt.plot(days, money_spent, color='green', linestyle='--')
+plt.plot(days, money_spent_2, color='#AAAAAA',  marker='o')
