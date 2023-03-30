@@ -1,0 +1,68 @@
+# Phylip은 계통수 작성, 분자진화 연구 및 다중 서열 정렬 등 분자생물학 분야에서 널리 사용되는 소프트웨어 패키지입니다. 
+# 이 패키지는 다양한 분자진화 연구 도구를 제공하며, 서열 데이터를 입력으로 받아 분석 및 시각화를 수행할 수 있습니다.
+
+# 또한 Phylip은 분자진화 분야에서 널리 사용되는 서열 정렬 포맷 중 하나입니다. 
+# Phylip 형식은 다중 서열 정렬(MSA) 데이터를 저장하기 위한 포맷으로, 각 서열의 이름과 서열 데이터를 나열하는 형태로 
+# 이루어져 있습니다. 이러한 Phylip 형식의 MSA 파일은 Biopython과 같은 여러 분자생물학 도구에서 읽고 쓸 수 있습니다.
+
+
+
+# Phylo는 계통수 분석에 사용되는 모듈로, 분자생물학에서 서열 간의 진화 관계를 파악하는 데 사용됩니다. 
+# 이 모듈은 분자진화 분야에서 매우 중요한 역할을 하며, 계통수 작성 및 시각화를 수행하는 다양한 도구와 
+# 함수를 제공합니다.
+
+# AlignIO는 다양한 형식의 다중 서열 정렬(MSA) 파일을 읽고 쓰기 위한 모듈입니다. 
+# 이 모듈은 다양한 포맷의 MSA 파일을 지원하며, Biopython 라이브러리에 포함되어 있습니다. 
+# AlignIO를 사용하면 파이썬에서 MSA 데이터를 쉽게 읽고 처리할 수 있으며, 이를 활용하여 
+# 분자생물학적 분석을 수행할 수 있습니다.
+
+import pandas as pd
+import Bio
+
+from io import StringIO
+from Bio import Phylo, AlignIO
+from Bio.Phylo.TreeConstruction import DistanceCalculator
+import urllib.request
+
+# Import data
+url = "https://raw.githubusercontent.com/risg99/Phylogenetic-trees-python/main/msa.phy"
+data = urllib.request.urlopen(url).read().decode()
+align = AlignIO.read(StringIO(data), "phylip")
+print(align)
+
+
+
+# Calculate the distance matrix 
+calculator = DistanceCalculator('identity')
+distMatrix = calculator.get_distance(align)
+print(distMatrix)
+
+
+
+
+# construct the phylogenetic tree using UGMA and NJ algorithms
+
+# UPGMA (Unweighted group method with arithmetic mean) is a sequential clustering algorithm 
+# that starts with things most similar. The distances in this average-linking clustering 
+# method are computed as arithmetic means. UPGMA produces a rooted tree. It assumes the rate 
+# of evolution as the same amongst all the organisms.
+
+# NJ (Neighbor-Joining) takes into account averaged distances to other leaves as well. 
+# It produces an unrooted tree and works fairly well in practice.
+
+from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
+
+# Create a DistanceTreeConstructor object
+constructor = DistanceTreeConstructor()
+
+# Construct the phylogenetic tree using UPGMA algorithm
+UPGMATree = constructor.upgma(distMatrix)
+
+# Construct the phlyogenetic tree using NJ algorithm
+NJTree = constructor.nj(distMatrix)
+
+
+# Draw the phylogenetic tree
+Phylo.draw(UPGMATree)
+
+Phylo.draw_ascii(NJTree)
