@@ -1,0 +1,139 @@
+사이킷런을 사용하여 로지스틱 회귀 모델 훈련
+
+
+lr = LogisticRegression(C = 100.0, random_state = 100) 에서 C는 로지스틱 회귀 모델의 하이퍼파라미터입니다. 
+C는 규제(regularization) 강도의 역수를 조절하며, 작은 값일수록 강한 규제를 나타냅니다.
+
+즉, C 값을 증가시키면 규제 강도가 감소하고, 모델이 보다 복잡해져서 훈련 데이터에 더 잘 맞게 됩니다. 반면, 
+C 값을 감소시키면 규제 강도가 증가하고, 더 간단한 모델이 만들어지며, 훈련 데이터에 과적합(overfitting) 되지 않도록 합니다.  
+C 값의 일반적인 범위는 0.0001에서 1000 사이입니다. 즉, 적절한 C 값을 선택하여 모델을 규제할 수 있습니다.
+
+적절한 C 값을 찾기 위해서는 교차 검증(cross-validation)을 사용하여 여러 C 값에 대한 성능을 평가하고 최적의 C 값을 결정해야 합니다.
+
+
+1. C 값의 후보 집합을 정의합니다. 이 때 후보 집합은 로그 스케일(log-scale)로 정의하는 것이 일반적입니다. 
+예를 들어, [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]과 같은 범위를 고려할 수 있습니다.
+
+2. 각 C 값에 대해 교차 검증을 수행하여 성능 지표를 계산합니다. 일반적으로는 정확도(accuracy), 정밀도(precision), 
+재현율(recall), F1 점수(F1 score) 등을 사용할 수 있습니다.
+
+3. 각 C 값에 대한 성능 지표의 평균 및 표준편차를 계산합니다.
+
+4. 가장 높은 평균 성능 지표를 가진 C 값을 선택합니다. 이 때, 표준편차도 고려하여 과적합을 방지할 수 있습니다.
+
+Scikit-learn 라이브러리에서는 LogisticRegressionCV 클래스를 사용하여 C 값을 자동으로 조정하는 교차 검증 기반 로지스틱 회귀 모델을 만들 수 있습니다.
+
+
+
+
+
+
+
+from sklearn import datasets
+import numpy as np
+
+############################# Load Data
+iris = datasets.load_iris()
+
+############################## Feature Selection
+# 꽃잎 길이 꽃잎 너비 는 3번째, 4번째에 있다.
+X = iris.data[:,[2,3]]
+y = iris.target
+print('클래스 레이블:', np.unique(y))
+# target 인 y 에는 0,1,2 세가지 레이블이 들어있다.
+
+
+
+############################# 테스트 데이터, 트레이닝 데이터 
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+X, y, test_size = 0.3, random_state = 100, stratify = y)
+
+
+
+
+############################# 스케일링 with 표준편차
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+
+# 샘플평균, 표준편차 계산
+sc.fit(X_train)
+
+# 훈련데이터셋을 표준화, 테스트셋도 마찬가지
+X_train_std = sc.transform(X_train)
+X_test_std = sc.transform(X_test)
+
+X_combined_std = np.vstack((X_train_std, X_test_std))
+y_combined = np.hstack((y_train, y_test))
+
+
+############################ Logistic Regression Model
+from sklearn.linear_model import LogisticRegression
+
+lr = LogisticRegression(C = 100.0, random_state = 100)
+lr.fit(X_train_std, y_train)
+
+
+############################ Decision Boundary Plot
+# plot_decision_regions 함수는 결정 경계(decision boundary)를 시각화하여 각 클래스(label)의 영역을 구분해주는 
+# 함수입니다. 이 함수는 훈련된 분류 모델(classifier)을 입력받아서, 특성 데이터(feature data)와 레이블 데이터
+# (label data)를 합쳐서 입력으로 받습니다. 그리고 그 입력 데이터들의 분포를 시각화하고, 결정 경계를 그려서 각 
+# 클래스의 영역을 색으로 구분합니다.
+
+from mlxtend.plotting import plot_decision_regions
+import matplotlib.pyplot as plt
+plot_decision_regions(X_combined_std, y_combined, clf=lr)
+
+
+plt.xlabel('petal length [standardized]')
+plt.ylabel('petal width [standardized]')
+plt.legend(loc = 'upper left')
+plt.tight_layout()
+plt.show()
+
+
+
+
+
+위에 예시에서는 C를 100 으로 정하였는데 , 다음은 cross validation 방법으로 10개 후보로 최적의 C를 찾아 로지스틱 모델을 만들자
+
+from sklearn.datasets import load_iris
+from sklearn.linear_model import LogisticRegressionCV
+from sklearn.model_selection import train_test_split
+
+# 붓꽃 데이터셋 로드
+iris = load_iris()
+
+# Feature, Target 데이터 생성
+cv_X = iris.data
+cv_y = iris.target
+
+# Train/Test 데이터 분리
+cv_X_train, cv_X_test, cv_y_train, cv_y_test = train_test_split(cv_X, cv_y, test_size=0.3, random_state=42)
+
+
+# Logistic Regression 모델 생성
+# cv=10 : 10-fold 교차 검증
+######### Cs=10 : 10개의 C 값 후보를 사용하여 교차 검증을 수행합니다.
+
+clf = LogisticRegressionCV(cv=10, Cs=10, random_state=42, max_iter=1000)
+print(f'최적의 C 값: {clf.C_[0]}')
+
+
+# 모델 학습
+clf.fit(cv_X_train, cv_y_train)
+
+# Test 데이터 예측
+cv_y_pred = clf.predict(cv_X_test)
+
+# Test 데이터 정확도 출력
+print(f"Test Accuracy: {clf.score(cv_X_test, cv_y_test):.3f}")
+
+
+
+
+
+
+
+
